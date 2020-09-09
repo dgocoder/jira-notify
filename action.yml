@@ -1,0 +1,11 @@
+name: 'Jira Deployment Action'
+description: 'Sets the deployment of a commit to correct environment in jira'
+inputs:
+  environment:  # id of input
+    description: 'Environment of change'
+    required: true
+runs:
+  using: "composite"
+  steps: 
+    - run: ${{ github.action_path }}/jira-notify.sh ${{ inputs.environment }}
+      shell: bash
