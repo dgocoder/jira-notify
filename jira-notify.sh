@@ -9,7 +9,7 @@ parse_jira_key_array() {
     fi
 }
 generate_json_payload_deployment() {
-    echo "Update Jira with status: successful"
+    echo "Update Jira with status: ${2}"
     if [[ "${1}" == 'dev' ]]; then
         ENV_TYPE='development'
     elif [[ "${1}" == 'qa' ]]; then
@@ -25,7 +25,7 @@ generate_json_payload_deployment() {
     echo {} | jq \
         --arg time_str "$(date +%s)" \
         --arg lastUpdated "${iso_time}" \
-        --arg state "successful" \
+        --arg state "${2}" \
         --arg buildNumber "${GITHUB_RUN_ID}" \
         --arg pipelineNumber "${GITHUB_RUN_ID}" \
         --arg projectName "${GITHUB_REPOSITORY}" \
@@ -125,7 +125,7 @@ post_to_jira() {
 
 parse_jira_key_array
 if [[ "$ISSUE_KEYS" != "[]" ]]; then
-    generate_json_payload_deployment $1
+    generate_json_payload_deployment $1 $2
     cat /tmp/jira-status.json
     post_to_jira
 fi

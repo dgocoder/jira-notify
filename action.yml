@@ -4,8 +4,12 @@ inputs:
   environment:  # id of input
     description: 'Environment of change'
     required: true
+  state:
+    description: 'Deployment state for jira'
+    required: false
+    default: successful
 runs:
   using: "composite"
   steps: 
-    - run: ${{ github.action_path }}/jira-notify.sh ${{ inputs.environment }}
+    - run: ${{ github.action_path }}/jira-notify.sh ${{ inputs.environment }} ${{ inputs.state }}
       shell: bash
